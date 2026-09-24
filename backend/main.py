@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 import services
 from schemas import Register
 import exceptions
+
 app = FastAPI()
 
 @app.get("/")
@@ -12,7 +13,8 @@ def say_hello():
 @app.post("/register")
 def register_user(user:Register):
     try:
-        return services.register_user(user)
+        services.register_user(user)
+        return {"information":"Account have been successfully created"}
     except exceptions.EmailAdressInUseError as e:
         raise HTTPException(
             status_code=400,

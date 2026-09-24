@@ -1,5 +1,6 @@
 import repository
 import exceptions
+from auth import hash_password
 
 def valid_email(email):
     if "@" in email:
@@ -16,6 +17,8 @@ def register_user(user):
         if not valid_email(user.email):
             raise exceptions.InvalidEmailError("This email is invalid")
 
-        return repository.register_user(user.name, user.email, user.age)
+        hashed_password = hash_password(user.password)
+
+        return repository.register_user(user.name, user.email, user.age, hashed_password)
     except Exception as e:
         raise exceptions.RegisterUserError(str(e))
