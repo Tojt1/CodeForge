@@ -1,6 +1,5 @@
 import sqlalchemy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
-from database import engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 import datetime
 
 class Base(DeclarativeBase):
@@ -16,8 +15,3 @@ class Users(Base):
     is_active: Mapped[bool] = mapped_column(default=True)
     created: Mapped[datetime.datetime] = mapped_column(sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
 
-
-def check_user_email_exist(email):
-    with Session(engine) as session:
-        stmt = sqlalchemy.select(Users).where(Users.email == email)
-        return session.execute(stmt).one_or_none()
