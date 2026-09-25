@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 import datetime
 
 class Base(DeclarativeBase):
@@ -15,4 +15,17 @@ class Users(Base):
     age: Mapped[int] = mapped_column(sqlalchemy.Integer)
     is_active: Mapped[bool] = mapped_column(default=True)
     created: Mapped[datetime.datetime] = mapped_column(sqlalchemy.DateTime, server_default=sqlalchemy.func.now())
+    repositories: Mapped[list["Repository"]] = relationship(
+        back_populates="author"
+    )
 
+class Repository(Base):
+    __tablename = "repositories"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(sqlalchemy.String(255))
+    description: Mapped[str] = mapped_column(sqlalchemy.Text())
+    author_id: Mapped[int] = mapped_column(sqlalchemy.ForeignKey("users.id"))
+    author:Mapped["Users"] = relationship(
+        back_populates="repositories"
+    )
