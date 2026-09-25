@@ -25,19 +25,22 @@ def register_user(user):
         raise exceptions.RegisterUserError(str(e))
 
 def sing_in(user):
-    if repository.check_user_email_exist(user.email) is None:
-        raise exceptions.EmailDoesNotExistsError("Whis email does not exists")
-    if not valid_email(user.email):
-        raise exceptions.InvalidEmailError("This email is invalid")
+    try:
+        if repository.check_user_email_exist(user.email) is None:
+            raise exceptions.EmailDoesNotExistsError("Whis email does not exists")
+        if not valid_email(user.email):
+            raise exceptions.InvalidEmailError("This email is invalid")
 
-    password = repository.get_user_password(user.email)
-    if not check_hash_password(user.password, password):
-        raise exceptions.InvalidPasswordError("Whis password is incorrect")
+        password = repository.get_user_password(user.email)
+        if not check_hash_password(user.password, password):
+            raise exceptions.InvalidPasswordError("Whis password is incorrect")
 
-    response = repository.check_login(user.email)
-    if response is None:
-        raise
-    else:
-        return create_jwt_token(response, user.email)
+        response = repository.check_login(user.email)
+        if response is None:
+            raise exceptions.USerNotFoundError("User with this email doesn't exists")
+        else:
+            return create_jwt_token(response, user.email)
+    except Exception as e :
+        raise exceptions.UserLoginError(str(e))
 
 

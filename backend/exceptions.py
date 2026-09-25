@@ -10,3 +10,7 @@ class EmailDoesNotExistsError(Exception):
     pass
 class InvalidPasswordError(Exception):
     pass
+class USerNotFoundError(Exception):
+    pass
+class UserLoginError(Exception):
+    pass

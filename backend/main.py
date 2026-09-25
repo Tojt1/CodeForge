@@ -38,4 +38,30 @@ def register_user(user:Register):
 
 @app.post("/login")
 def login_user(user:Login):
-    return services.sing_in(user)
+    try:
+        return services.sing_in(user)
+    except exceptions.EmailDoesNotExistsError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+    except exceptions.InvalidEmailError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+    except exceptions.InvalidPasswordError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+    except exceptions.USerNotFoundError as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
