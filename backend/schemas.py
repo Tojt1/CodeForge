@@ -5,3 +5,7 @@ class Register(BaseModel):
     email: str
     password:str
     age: int
+
+class Login(BaseModel):
+    email:str
+    password:str

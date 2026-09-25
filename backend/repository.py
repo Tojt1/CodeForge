@@ -22,3 +22,13 @@ def register_user(name, email, age, password):
             session.commit()
     except Exception as e:
         raise exceptions.AddusertoDBError(str(e))
+
+def get_user_password(email):
+    with Session(engine) as session:
+        query = sqlalchemy.select(Users.password).where(Users.email == email)
+        return session.execute(query).scalar_one_or_none()
+
+def check_login(email):
+    with Session(engine) as session:
+        query = sqlalchemy.select(Users.id).where(Users.email == email)
+        return session.execute(query).scalar_one_or_none()
