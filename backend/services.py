@@ -1,7 +1,7 @@
 import repository
 import exceptions
-from auth import hash_password
-from auth import check_hash_password
+from auth import hash_password, check_hash_password, create_jwt_token
+
 
 def valid_email(email):
     if "@" in email:
@@ -26,14 +26,18 @@ def register_user(user):
 
 def sing_in(user):
     if repository.check_user_email_exist(user.email) is None:
-        raise exceptions.EmailDoesNotExistsError()
+        raise exceptions.EmailDoesNotExistsError("Whis email does not exists")
     if not valid_email(user.email):
-        raise exceptions.InvalidEmailError()
+        raise exceptions.InvalidEmailError("This email is invalid")
 
     password = repository.get_user_password(user.email)
     if not check_hash_password(user.password, password):
-        raise exceptions.InvalidPasswordError()
+        raise exceptions.InvalidPasswordError("Whis password is incorrect")
 
-    if not repository.check_login(user.email) is None:
-        return {"Information": "Pomyślnie zalogowano"}
+    response = repository.check_login(user.email)
+    if response is None:
+        raise
+    else:
+        return create_jwt_token(response, user.email)
+
 

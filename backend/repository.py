@@ -30,5 +30,5 @@ def get_user_password(email):
 
 def check_login(email):
     with Session(engine) as session:
-        query = sqlalchemy.select(Users.id).where(Users.email == email)
-        return session.execute(query).scalar_one_or_none()
+        query = sqlalchemy.select(Users.id, Users.user_name, Users.age).where(Users.email == email)
+        return session.execute(query).mappings().one_or_none()
