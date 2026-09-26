@@ -20,7 +20,7 @@ class Users(Base):
     )
 
 class Repository(Base):
-    __tablename = "repositories"
+    __tablename__ = "repositories"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(sqlalchemy.String(255))
