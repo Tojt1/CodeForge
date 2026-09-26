@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException
 import services
-from schemas import Register, Login
+from schemas import Register, Login, CreateRepository
 import exceptions
+
 
 app = FastAPI()
 
@@ -65,3 +66,8 @@ def login_user(user:Login):
             status_code=400,
             detail=str(e)
         )
+
+
+@app.post("/repositories")
+def create_repository(repository: CreateRepository, jwt:str):
+    return services.create_repository(repository, jwt)

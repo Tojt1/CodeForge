@@ -6,6 +6,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
+      - repository_data:/data/repositories
     depends_on:
       - db
 
@@ -22,3 +23,4 @@ services:
 
 volumes:
   postgres_data:
+  repository_data:

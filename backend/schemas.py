@@ -9,3 +9,7 @@ class Register(BaseModel):
 class Login(BaseModel):
     email:str
     password:str
+
+class CreateRepository(BaseModel):
+    name: str
+    description: str

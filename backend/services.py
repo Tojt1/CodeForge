@@ -1,6 +1,8 @@
 import repository
 import exceptions
-from auth import hash_password, check_hash_password, create_jwt_token
+from auth import hash_password, check_hash_password, create_jwt_token, decode_jwt_token
+import subprocess
+from config import REPOSITORY_PATH
 
 
 def valid_email(email):
@@ -42,5 +44,16 @@ def sing_in(user):
             return create_jwt_token(response, user.email)
     except Exception as e :
         raise exceptions.UserLoginError(str(e))
+
+def create_repository(repo, jwt):
+    user_info = decode_jwt_token(jwt)
+    repository_path = REPOSITORY_PATH /f"{user_info["name"]}/{repo.name}"
+
+    repository.create_repository(repo, user_info["id"])
+
+    subprocess.run(
+        ["git", "init", "--bare", str(repository_path)],
+        check=True
+    )
 
 

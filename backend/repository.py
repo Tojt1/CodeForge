@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from database import engine
 import sqlalchemy
-from models import Users
+from models import Users, Repository
 import exceptions
 
 
@@ -32,3 +32,13 @@ def check_login(email):
     with Session(engine) as session:
         query = sqlalchemy.select(Users.id, Users.user_name, Users.age).where(Users.email == email)
         return session.execute(query).mappings().one_or_none()
+
+def create_repository(repo, user_id):
+    with Session(engine) as session:
+        repository = Repository(
+            name=repo.name,
+            description=repo.description,
+            author_id=user_id
+        )
+        session.add(repository)
+        session.commit()
